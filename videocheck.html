@@ -45,14 +45,15 @@
 	// ここで、カメラにアクセスする
 	navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 		video.srcObject = stream;
-		setInterval(UpdateStream, 5000)
+		setInterval(UpdateStream, 5000)// 5秒に一回実行
 		//UpdateStream()
 	}).catch((err) => {
 		window.alert(err.name + ': ' + err.message);
 	});
 
 	function UpdateStream() {
-
+			
+			// Canvasに描画したものを画像化する
 			var canvas = document.getElementById('canvas1');
 
 			var ctx = canvas.getContext('2d');
@@ -67,17 +68,16 @@
 				var img = document.getElementById('image1');
 				img.src = window.URL.createObjectURL(blob);
 				
+				// サーバーに画像をPOSTし、保存しておいてもらう
 				var request = new XMLHttpRequest();
 				request.open('POST', 'https://natural-nail-eye.sakura.ne.jp/avatars/index.php');
 				//request.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
 				var formData = new FormData();
 				formData.append('image', blob, 'unko'+count+'.jpeg');
 				count = count + 1;
-				window.alert(blob);
 				//formData.append('image', '<%= Time.now.strftime("%Y%m%d%H%M") %>}.jpeg');
 				formData.append('uuid', 'yamashita');
 				request.send(formData);
-				window.alert("test");
 
 			}, 'image/jpeg', 0.95);
 
